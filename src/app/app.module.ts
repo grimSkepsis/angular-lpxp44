@@ -10,7 +10,7 @@ import { MyCounterComponent } from './my-counter.component';
 
 @NgModule({
   imports:      [ BrowserModule,
-    StoreModule.forRoot({ count: counterReducer }) ],
+    StoreModule.forRoot({ counter: counterReducer }) ],
   declarations: [ AppComponent, MyCounterComponent ],
   bootstrap:    [ AppComponent ]
 })

@@ -2,23 +2,26 @@
 import { Component } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { increment, decrement, reset } from './counter.actions';
+import { increment, decrement, reset, setAutoIncrement } from './counter.actions';
  
 @Component({
   selector: 'app-my-counter',
   template: `<button id="increment" (click)="increment()">Increment</button>
 
-            <div>Current Count: {{ count$ | async }}</div>
+            <div>Current Count: {{ (counter$ | async ).count}}</div>
 
             <button id="decrement" (click)="decrement()">Decrement</button>
 
-            <button id="reset" (click)="reset()">Reset Counter</button>`,
+            <button id="reset" (click)="reset()">Reset Counter</button>
+            <p>Auto Incrementing: {{ (counter$ | async ).autoIncrementing}}</p>
+            <button (click)="startAutoIncrement()" >Start Auto Increment</button>
+            <button (click)="stopAutoIncrement()" >Stop Auto Increment</button>`,
 })
 export class MyCounterComponent {
-  count$: Observable<number>;
+  counter$: Observable<{ count: number}>;
  
-  constructor(private store: Store<{ count: number }>) {
-    this.count$ = store.pipe(select('count'));
+  constructor(private store: Store<{ count: number, autoIncrementing: boolean }>) {
+    this.counter$ = store.pipe(select('counter'));
   }
  
   increment() {
@@ -31,5 +34,12 @@ export class MyCounterComponent {
  
   reset() {
     this.store.dispatch(reset());
+  }
+
+  startAutoIncrement() {
+    this.store.dispatch(setAutoIncrement({startAutoIncrement: true}));
+  }
+  stopAutoIncrement() {
+    this.store.dispatch(setAutoIncrement({startAutoIncrement: false}));
   }
 }
